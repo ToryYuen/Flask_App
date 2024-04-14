@@ -34,11 +34,12 @@ with app.app_context():
 def index():
     if request.method == 'POST':
         url = request.form['content']
-        message = {
-                "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
-                "url": url,
-        }
-        r.lpush("download", json.dumps(message))
+        if url.startswith("http://") or url.startswith("https://"):
+            message = {
+                    "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "url": url,
+            }
+            r.lpush("download", json.dumps(message))
         return redirect('/')
 
     else:
